@@ -5,31 +5,24 @@ import { DATA } from '../data';
 import { PostList } from '../components/PostList';
 import { AppHeaderIcon } from '../components/AppHeaderIcon';
 
-export const MainScreen = ({ navigation }) => {
+export const BookedScreen = ({ navigation }) => {
   const openPostHandler = post => {
     navigation.navigate('Post', { 
       postId: post.id, 
       date: post.date, 
       booked: post.booked 
     });
-  }
+  };
+
+  const data = DATA.filter(post => post.booked);
 
   return (
-    <PostList data={DATA} onOpen={openPostHandler} />
+    <PostList data={data} onOpen={openPostHandler} />
   );
 };
 
-MainScreen.navigationOptions = ({ navigation }) => ({
-  headerTitle: 'Blog',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-      <Item
-        title='Take photo'
-        iconName='ios-camera'
-        onPress={() => navigation.push('Create')}
-      />
-    </HeaderButtons>
-  ),
+BookedScreen.navigationOptions = ({ navigation }) => ({
+  headerTitle: 'Favorite',
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
       <Item
