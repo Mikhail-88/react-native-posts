@@ -5,7 +5,6 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { AppHeaderIcon } from '../components/AppHeaderIcon';
 
 export const AboutScreen = () => {
-
   return (
     <View style={styles.center}>
       <Text>This is an application for storing posts.</Text>

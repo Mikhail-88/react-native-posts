@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import { AppLoading } from 'expo';
+import { Provider } from 'react-redux';
 
 import { AppNavigation } from './src/navigation/AppNavigation';
 import { bootstrap } from './src/bootstrap';
+import { store } from './src/redux/store';
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -18,6 +21,8 @@ export default function App() {
   }
 
   return (
-    <AppNavigation />
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
   );
 };

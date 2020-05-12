@@ -1,14 +1,37 @@
-import React from 'react';
-import { StyleSheet, ScrollView, View, Text, Image, Button, Alert } from 'react-native';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { 
+  StyleSheet, 
+  ScrollView, 
+  View, 
+  Text, 
+  Image, 
+  Button, 
+  Alert 
+} from 'react-native';
 
-import { DATA } from '../data';
 import { THEME } from '../theme';
 import { AppHeaderIcon } from '../components/AppHeaderIcon';
+import { toggleBooked, removePost } from '../redux/actions/post';
 
 export const PostScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const postId = navigation.getParam('postId');
-  const post = DATA.find(post => post.id === postId);
+  const post = useSelector(state => state.post.allPosts.find(post => post.id === postId));
+  const booked = useSelector(state => state.post.bookedPosts.some(post => post.id === postId));
+
+  const toggleHandler = useCallback(() => {
+    dispatch(toggleBooked(post));
+  }, [dispatch, post]);
+
+  useEffect(() => {
+    navigation.setParams({ booked });
+  }, [booked]);
+
+  useEffect(() => {
+    navigation.setParams({ toggleHandler });
+  }, [toggleHandler]);
 
   const removeHandler = () => {
     Alert.alert(
@@ -19,11 +42,22 @@ export const PostScreen = ({ navigation }) => {
           text: 'Cancel',
           style: 'cancel'
         },
-        { text: 'Delete', style: 'destructive', onPress: () => console.log('OK Pressed') }
+        { 
+          text: 'Delete', 
+          style: 'destructive', 
+          onPress() {
+            navigation.navigate('Main');
+            dispatch(removePost(postId));
+          }
+        }
       ],
       { cancelable: false }
     );
   };
+
+  if (!post) {
+    return null;
+  }
 
   return (
     <ScrollView>
@@ -31,7 +65,12 @@ export const PostScreen = ({ navigation }) => {
       <View style={styles.textBlock}>
         <Text style={styles.title}>{post.text}</Text>
       </View>
-      <Button title='Delete' color={THEME.DANGER_COLOR} onPress={removeHandler} />
+      <Button
+        style={styles.button}
+        title='Delete' 
+        color={THEME.DANGER_COLOR} 
+        onPress={removeHandler} 
+      />
     </ScrollView>
   );
 };
@@ -39,6 +78,7 @@ export const PostScreen = ({ navigation }) => {
 PostScreen.navigationOptions = ({ navigation }) => {
   const date = navigation.getParam('date');
   const booked = navigation.getParam('booked');
+  const toggleHandler = navigation.getParam('toggleHandler');
   const iconName = booked ? 'ios-star' : 'ios-star-outline';
 
   return {
@@ -48,7 +88,7 @@ PostScreen.navigationOptions = ({ navigation }) => {
         <Item
           title='Take photo'
           iconName={iconName}
-          onPress={() => console.log('OK Pressed')}
+          onPress={toggleHandler}
         />
       </HeaderButtons>
     ),
@@ -65,5 +105,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'open-regular'
+  },
+  button: {
+    width: '40%'
   }
 });

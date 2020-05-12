@@ -1,9 +1,23 @@
 import React from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  FlatList, 
+  Text
+} from 'react-native';
 
 import { Post } from './Post';
 
 export const PostList = ({ data, onOpen }) => {
+  if (!data.length) {
+    return (
+      <View style={styles.wrapper}>
+        <Text style={styles.noDataText}>There are no posts.</Text>
+        <Text style={styles.noDataText}>Let's make a new post.</Text>
+      </View>
+    )
+  }
+  
   return (
     <View style={styles.wrapper}>
       <FlatList 
@@ -18,5 +32,11 @@ export const PostList = ({ data, onOpen }) => {
 const styles = StyleSheet.create({
   wrapper: {
     padding: 10
+  },
+  noDataText: {
+    fontFamily: 'open-regular',
+    textAlign: 'center',
+    marginVertical: 10,
+    fontSize: 18
   }
 });
