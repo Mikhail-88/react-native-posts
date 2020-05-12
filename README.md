@@ -1,4 +1,4 @@
-# React Native - Posts App
+# React Native - Self Blog App
 
 Project, based on knowlages about React Native/Expo and Redux technologies.
 
@@ -19,4 +19,6 @@ For running this app:
   - clone repo,
   - npm install,
   - npm start,
-  - you should now see the Posts app running on your iOS or Android simulator.
+  - you should now see the Self Blog app running on your iOS or Android simulator.
+
+You can see the Self Blog app running by scan QR code with your Expo mobile app here [LINK](https://expo.io/@mikhaildev/react-native-posts)
